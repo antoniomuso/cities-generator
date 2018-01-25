@@ -3,4 +3,5 @@ cmake-build-debug
 .idea
 file.mtl
 file.obj
+out.png
 bin

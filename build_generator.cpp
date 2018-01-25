@@ -25,24 +25,23 @@ struct Move {
 
 struct position_matrix {
     vector<bool>* pos;
-    unsigned long h;
-    unsigned long w;
-    position_matrix(unsigned long height, unsigned long width) {
+    unsigned int h;
+    unsigned int w;
+    position_matrix(unsigned int height, unsigned int width) {
         h = height;
         w = width;
         pos = new vector<bool>(height * width);
     }
-    bool at (unsigned long x, unsigned long y) {
+    bool at (unsigned int x, unsigned int y) {
         if (x >= w || y >= h) throw false;
         return pos->at(y * w + x );
     }
-    void set (unsigned long x, unsigned long y, bool value) {
+    void set (unsigned int x, unsigned int y, bool value) {
         if (x >= w || y >= h) throw false;
         pos->at(y * w + x ) = value;
     }
-    bool isGoodPos (unsigned long x, unsigned long y) {
-        if (x >= w || y >= h) return false;
-        return true;
+    bool isGoodPos (unsigned int x, unsigned int y) {
+        return !(x >= w || y >= h);
     }
 };
 
@@ -266,7 +265,6 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
     auto ir = next_rand1i(rng,node.adj.size());
     print("value gen: {} values: {} \n",ir, node.adj.size()-1);
     for (auto edge : *(node.adj.at(ir)) ) {
-
         auto posMat = matPos;
         if (collisionControll(graph,rot,posMat,edge,blockPosition)) {
             continue;
@@ -305,9 +303,9 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
 }
 
 void callBuild(scene* scn, Graph* graph, long inode,
-               frame3f pos, rng_pcg32 rng, unsigned long height, unsigned long width) {
+               frame3f pos, rng_pcg32 rng, unsigned int height, unsigned int width) {
     auto blockPosition = position_matrix(height,width);
-    build(scn,graph,inode,pos,rng,blockPosition,_0, {height-1.0f, width-1.0f});
+    build(scn,graph,inode,pos,rng,blockPosition,_0, {int(height-1), int(width-1)});
 }
 
 void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph) {
@@ -417,8 +415,8 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
 }
 
 
-Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat) {
-    auto graph = new Graph();
+Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph * graph) {
+    //auto graph = new Graph();
 
     auto startNode = node{};
 
@@ -587,8 +585,8 @@ int main () {
     scen->shapes.push_back(shp);
     scen->instances.push_back(new instance{"floor", {{1,0,0},{0,1,0},{0,0,1},{0,0.15,0}}, shp});
 
-
-    auto graph = build_graph_houses(scen,mapMat);
+    auto graph = new Graph();
+    build_graph_houses(scen,mapMat,graph);
     build_roads(scen,mapMat,graph);
     auto rng =  init_rng(0, static_cast<uint64_t>(time(NULL)));
 
@@ -603,6 +601,10 @@ int main () {
 
 
     save_scene("./file.obj",scen,save_options());
+
+    delete graph;
+    delete scen;
+    delete mapMat;
 }
 
 
