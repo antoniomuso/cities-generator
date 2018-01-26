@@ -601,7 +601,7 @@ int main (int argc, char** argv) {
     shp->texcoord = {{-10, -10}, {10, -10}, {10, 10}, {-10, 10}};
     shp->triangles = {{0, 1, 2}, {0, 2, 3}};
     scen->shapes.push_back(shp);
-    scen->instances.push_back(new instance{"floor", {{1,0,0},{0,1,0},{0,0,1},{0,0.15,0}}, shp});
+    scen->instances.push_back(new instance{"floor", {{1,0,0},{0,1,0},{0,0,1},{0,0.2,0}}, shp});
 
     auto graph = new Graph();
     build_graph_houses(scen,mapMat,graph);
