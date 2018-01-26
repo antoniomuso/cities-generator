@@ -24,7 +24,7 @@ To run application
 cd ..
 ./bin/build_generator
 ```
-You can use option **-d** to change dimension of cities, default 50, and **-o** to change filename of output.
+You can use option **-d** to change cities dimension, default 50, and **-o** to change output filename.
 ```
 ./bin/build_generator -d 100 -o myFile.obj
 ```
