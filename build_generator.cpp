@@ -557,8 +557,8 @@ int main (int argc, char** argv) {
         env->name = "sky";
         env->ke = {1, 1, 1};
         auto txt = new texture();
-        txt->path = "sky1.hdr";
-        txt->hdr = make_sunsky_image(512, pif / 2, true);
+        txt->path = "sky2.hdr";
+        txt->hdr = make_sunsky_image(512, pif/2 ,3,true,true);
         env->ke_txt.txt = txt;
         scen->textures += txt;
         scen->environments += env;
@@ -569,14 +569,14 @@ int main (int argc, char** argv) {
                      {-1.4f, 8, 6}};
         lshp->points = {0, 1};
         auto lmat = new material{"light"};
-        lmat->ke = {150, 150, 150};
+        lmat->ke = {500, 500, 500};
         lmat->kd = {1.0f, 0.57647058823f, 0.16078431372f};
         lshp->mat = lmat;
 
         scen->shapes.push_back(lshp);
         scen->materials.push_back(lmat);
         scen->instances.push_back(
-                new instance{"light", identity_frame3f, lshp});
+                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,10,40}}, lshp});
     }
     // add cam
     auto cam = new camera{"cam"};
