@@ -545,26 +545,39 @@ int main (int argc, char** argv) {
     auto parser = make_parser(argc, argv, "cities-generator", "create city");
     auto dim = parse_opt(parser, "--dimension", "-d","cities dimension", 50);
     auto out = parse_opt(parser, "--output-file", "-o", "output filename" , "out.obj"s);
+    auto sky = parse_flag(parser, "--sky", "-s", "insert sky" , false);
 
     auto scen = new scene();
 
     auto mapMat = new std::map<string, material*>();
     //auto mapShape = new std::map<string, shape*>();
 
-    // add light
-    auto lshp = new shape{"light"};
-    lshp->pos = {{1.4f, 8, 6}, {-1.4f, 8, 6}};
-    lshp->points = {0, 1};
-    auto lmat = new material{"light"};
-    lmat->ke = {150, 150, 150};
-    lmat->kd =  {1.0f, 0.57647058823f, 0.16078431372f};
-    lshp->mat = lmat;
+    if (sky) {
+        auto env = new environment();
+        env->name = "sky";
+        env->ke = {1, 1, 1};
+        auto txt = new texture();
+        txt->path = "sky1.hdr";
+        txt->hdr = make_sunsky_image(512, pif / 2, true);
+        env->ke_txt.txt = txt;
+        scen->textures += txt;
+        scen->environments += env;
+    } else {
+        // add light
+        auto lshp = new shape{"light"};
+        lshp->pos = {{1.4f,  8, 6},
+                     {-1.4f, 8, 6}};
+        lshp->points = {0, 1};
+        auto lmat = new material{"light"};
+        lmat->ke = {150, 150, 150};
+        lmat->kd = {1.0f, 0.57647058823f, 0.16078431372f};
+        lshp->mat = lmat;
 
-    scen->shapes.push_back(lshp);
-    scen->materials.push_back(lmat);
-    scen->instances.push_back(
-            new instance{"light", identity_frame3f, lshp});
-
+        scen->shapes.push_back(lshp);
+        scen->materials.push_back(lmat);
+        scen->instances.push_back(
+                new instance{"light", identity_frame3f, lshp});
+    }
     // add cam
     auto cam = new camera{"cam"};
     cam->frame = lookat_frame3f({-10, 4, 10}, {0, 1, 0}, {0, 1, 0});
