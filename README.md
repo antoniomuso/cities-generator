@@ -12,7 +12,22 @@ This project is repository version of my yocto-gl [Fork](https://github.com/anto
 
 
 ## Getting Started
-
+```
+git clone --recursive https://github.com/antoniomuso/cities-generator.git
+```
+How to build.
+```
+mkdir build; cd build; cmake ..; cmake --build .
+```
+To run application
+```
+cd ..
+./bin/build_generator
+```
+You can use option **-d** to change dimension of cities, default 50, and **-o** to change filename of output.
+```
+./bin/build_generator -d 100 -o myFile.obj
+```
 
 ### Prerequisites
 
