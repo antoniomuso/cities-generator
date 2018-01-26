@@ -540,7 +540,12 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
 
 
-int main () {
+int main (int argc, char** argv) {
+    // command line parser
+    auto parser = make_parser(argc, argv, "cities-generator", "create city");
+    auto dim = parse_opt(parser, "--dimension", "-d","cities dimension", 50);
+    auto out = parse_opt(parser, "--output-file", "-o", "output filename" , "out.obj"s);
+
     auto scen = new scene();
 
     auto mapMat = new std::map<string, material*>();
@@ -590,7 +595,7 @@ int main () {
     build_roads(scen,mapMat,graph);
     auto rng =  init_rng(0, static_cast<uint64_t>(time(NULL)));
 
-    callBuild(scen,graph,graph->nodeStart,{{1,0,0},{0,1,0},{0,0,1},{-25,0,+25}},rng, 50,50);
+    callBuild(scen,graph,graph->nodeStart,{{1,0,0},{0,1,0},{0,0,1},{-25,0,+25}},rng, dim,dim);
     /*
     graph.nodes.push_back(loadNode("Models/modularBuildings_010.obj", scen, mapMat));
     auto nod = loadNode("Models/modularBuildings_059.obj", scen, mapMat);
@@ -600,7 +605,7 @@ int main () {
      */
 
 
-    save_scene("./file.obj",scen,save_options());
+    save_scene(out,scen,save_options());
 
     delete graph;
     delete scen;
