@@ -50,7 +50,7 @@ You can use option **-d** to change cities dimension, default 50, and **-o** to 
 
 ### Prerequisites
 
-To Build you need of [OpenGL](http://freeglut.sourceforge.net/), [Glew](http://glew.sourceforge.net/) and [Glfw](http://www.glfw.org/) 
+To Build you need of [OpenGL](http://freeglut.sourceforge.net/), [Glew](http://glew.sourceforge.net/) and [Glfw](http://www.glfw.org/)
 
 ### Installing
 You can install dependencis on Ubuntu with the following commands:
@@ -60,7 +60,7 @@ sudo apt-get install freeglut3 freeglut3-dev
 sudo apt-get install libglew-dev
 sudo apt-get install libglfw3-dev
 ```
-
+You need last gcc version, you can install it [here](https://gist.github.com/application2000/73fd6f4bf1be6600a2cf9f56315a2d91)
 
 
 
