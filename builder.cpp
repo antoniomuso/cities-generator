@@ -310,27 +310,27 @@ void callBuild(scene* scn, Graph* graph, long inode,
 
 void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph) {
 
-    auto stradaConStrisciPedonale =  loadNode("myModel/roadTile_025.obj",scen,mapMat);
-    auto stradaConPiccolaUscitaInBassoVerde = loadNode("myModel/roadTile_032.obj",scen,mapMat);
-    auto stradaConUscitaGrandeInBassoVerde = loadNode("myModel/roadTile_150.obj",scen,mapMat);
-    auto stradaDrittaBordiVerde = loadNode("myModel/roadTile_142.obj",scen,mapMat);
+    auto stradaConStrisciPedonale =  loadNode("myModels/roadTile_025.obj",scen,mapMat);
+    auto stradaConPiccolaUscitaInBassoVerde = loadNode("myModels/roadTile_032.obj",scen,mapMat);
+    auto stradaConUscitaGrandeInBassoVerde = loadNode("myModels/roadTile_150.obj",scen,mapMat);
+    auto stradaDrittaBordiVerde = loadNode("myModels/roadTile_142.obj",scen,mapMat);
     //auto stradaDrittaSenzaUnBordoVerde= loadNode("ModelsRoads/roadTile_149.obj",scen,mapMat);
     //auto stradaDrittaVerdeRialzata= loadNode("ModelsRoads/roadTile_183.obj",scen,mapMat);
     //auto incrocioAQuattroVerde = loadNode("ModelsRoads/roadTile_141.obj",scen,mapMat);
     //auto bloccoVerdePiano = loadNode("ModelsRoads/roadTile_168.obj",scen,mapMat);
-    auto stradaDrittaVerde = loadNode("myModel/roadTile_162.obj",scen,mapMat);
-    auto stradaChiusa = loadNode("myModel/roadTile_038.obj",scen,mapMat);
+    auto stradaDrittaVerde = loadNode("myModels/roadTile_162.obj",scen,mapMat);
+    auto stradaChiusa = loadNode("myModels/roadTile_038.obj",scen,mapMat);
 
 
     //auto stradaConPiccolaUscitaInBassoBianca = loadNode("ModelsRoads/roadTile_121.obj",scen,mapMat);
     //auto incrocioAQuattroBianco = loadNode("ModelsRoads/roadTile_121.obj",scen,mapMat);
     //auto stradaStrisceSenzaBianca = loadNode("ModelsRoads/roadTile_109.obj",scen,mapMat);
     //auto stradaDrittaConBordiGrossiBianca = loadNode("ModelsRoads/roadTile_109.obj",scen,mapMat);
-    auto stradaDrittaBianca = loadNode("myModel/roadTile_292.obj",scen,mapMat);
+    auto stradaDrittaBianca = loadNode("myModels/roadTile_292.obj",scen,mapMat);
 
 
-    auto albero = loadNode("myModel/roadTile_019.obj",scen,mapMat);
-    auto alberoBig = loadNode("myModel/roadTile_020.obj",scen,mapMat);
+    auto albero = loadNode("myModels/roadTile_019.obj",scen,mapMat);
+    auto alberoBig = loadNode("myModels/roadTile_020.obj",scen,mapMat);
 
     auto house = graph->nodes.at(graph->nodeStart);
 
@@ -421,16 +421,16 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     auto startNode = node{};
 
     // load houses
-    auto BaseConScalinata = loadNode("myModel/modularBuildings_027.obj", scen, mapMat);
-    auto BaseConScalinataEFinestre = loadNode("myModel/modularBuildings_024.obj", scen, mapMat);
-    auto baseConFinestreEPortone = loadNode("myModel/modularBuildings_054.obj", scen, mapMat); //
+    auto BaseConScalinata = loadNode("myModels/modularBuildings_027.obj", scen, mapMat);
+    auto BaseConScalinataEFinestre = loadNode("myModels/modularBuildings_024.obj", scen, mapMat);
+    auto baseConFinestreEPortone = loadNode("myModels/modularBuildings_054.obj", scen, mapMat); //
 
     // piani
-    auto pianoFinestre = loadNode("myModel/modularBuildings_030.obj", scen, mapMat); // Piano con due finestre
-    auto pianoFinestrone = loadNode("myModel/modularBuildings_041.obj", scen, mapMat); // piano con finestrona grossa e balconcino
-    auto pianoFinestreQuadrate = loadNode("myModel/modularBuildings_034.obj", scen, mapMat);
+    auto pianoFinestre = loadNode("myModels/modularBuildings_030.obj", scen, mapMat); // Piano con due finestre
+    auto pianoFinestrone = loadNode("myModels/modularBuildings_041.obj", scen, mapMat); // piano con finestrona grossa e balconcino
+    auto pianoFinestreQuadrate = loadNode("myModels/modularBuildings_034.obj", scen, mapMat);
     auto pianoConBalcone = loadNode("Models/modularBuildings_042.obj", scen, mapMat);
-    auto pianoConFinestreCoperte = loadNode("myModel/modularBuildings_033.obj", scen, mapMat);
+    auto pianoConFinestreCoperte = loadNode("myModels/modularBuildings_033.obj", scen, mapMat);
 
     // load roofs
     auto tetto = loadNode("Models/modularBuildings_044.obj", scen, mapMat);

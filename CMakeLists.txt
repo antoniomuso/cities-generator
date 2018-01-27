@@ -60,6 +60,6 @@ if(UNIX AND NOT APPLE)
     target_link_libraries(yocto_gl Threads::Threads)
 endif(UNIX AND NOT APPLE)
 
-add_executable(build_generator build_generator.cpp yocto-gl/yocto/yocto_gl.h)
+add_executable(builder builder.cpp yocto-gl/yocto/yocto_gl.h)
 
-target_link_libraries(build_generator yocto_gl)
+target_link_libraries(builder yocto_gl)
