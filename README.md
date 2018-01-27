@@ -56,7 +56,7 @@ To Build you need of [OpenGL](http://freeglut.sourceforge.net/), [Glew](http://g
 You can install dependencis on Ubuntu with the following commands:
 ```
 sudo apt-get update
-sudo apt-get install freeglut3 freeglut3-dev
+sudo apt-get install freeglut3-dev
 sudo apt-get install libglew-dev
 sudo apt-get install libglfw3-dev
 ```
