@@ -15,8 +15,8 @@ The nodes will be added to graph struct that represents the grammar.
 Rules of grammar are of this type `A := B | C | D ` this meaning that the node `A` can be replaced with the node `B` or node `C` or `D`, The variable selection is random in the algorithm. it is possible to do a substitution with more variables ` B := C and D | C and B ` this means that `B` can be replaced with `C` and `D`, or with `C` and `B`. 
 The grammar costruction is based on three principal methods:
 - **loadNode**: it takes a path of .obj in input and returns a node.
-- **add_multi_nodes_or**: it takes a node `A` and a set of nodes `Bn` (with relative costants)and creates the following rule `A := .. | B | B1 | ... | Bn`. if just exist a rule for `A`, it merges the set with rule.
-- **add_multi_nodes_and**: it takes a node `A` and a set of nodes `Bn` and create the following rule `A := .. | B1 and B2 and ... Bn`
+- **add_multi_nodes_or**: it takes a node `A` and a set of nodes `Bn` (with relative costants)and creates the following rule `A := .. | B | B1 | ... | Bn`. If a rule for `A` exists, it merges the old rule with the new.
+- **add_multi_nodes_and**: it takes a node `A` and a set of nodes `Bn` and creates the following rule `A := .. | B1 and B2 and ... Bn`
 
 
 ## Images
