@@ -64,8 +64,9 @@ sudo apt-get install libglfw3-dev
 
 
 
+## Authors
 
-
+* **Antonio Musolino** - [antoniomuso](https://github.com/antoniomuso)
 
 
 
