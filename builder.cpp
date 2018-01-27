@@ -569,20 +569,22 @@ int main (int argc, char** argv) {
                      {-1.4f, 8, 6}};
         lshp->points = {0, 1};
         auto lmat = new material{"light"};
-        lmat->ke = {500, 500, 500};
+        lmat->ke = {3000, 3000, 3000};
         lmat->kd = {1.0f, 0.57647058823f, 0.16078431372f};
         lshp->mat = lmat;
 
         scen->shapes.push_back(lshp);
         scen->materials.push_back(lmat);
         scen->instances.push_back(
-                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,10,10}}, lshp});
+                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,30,10}}, lshp});
     }
     // add cam
     auto cam = new camera{"cam"};
-    cam->frame = lookat_frame3f({-10, 4, 10}, {0, 1, 0}, {0, 1, 0});
+    cam ->frame = {{1,0,0},{0,1,0},{0,0,1},{-25,10,+25}};
     cam->frame = transform_frame(cam->frame,translation_frame3f({0,0,10}));
-    cam->frame = transform_frame(cam->frame,rotation_frame3f({0,1,0},69.0f));
+    cam->frame = transform_frame(cam->frame,rotation_frame3f({0,1,0},-pif/6));
+    cam->frame = transform_frame(cam->frame,rotation_frame3f({1,0,0},-pif/14));
+    cam->frame = transform_frame(cam->frame,translation_frame3f({0,0,22}));
     cam->yfov = 15 * pif / 180.f;
     cam->aspect = 16.0f / 9.0f;
     cam->aperture = 0;
