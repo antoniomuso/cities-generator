@@ -576,7 +576,7 @@ int main (int argc, char** argv) {
         scen->shapes.push_back(lshp);
         scen->materials.push_back(lmat);
         scen->instances.push_back(
-                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,10,40}}, lshp});
+                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,10,10}}, lshp});
     }
     // add cam
     auto cam = new camera{"cam"};
