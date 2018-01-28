@@ -45,7 +45,7 @@ cd ..
 ```
 You can use option **-d** to change cities dimension, default 50, and **-o** to change output filename.
 ```
-./bin/build_generator -d 100 -o myFile.obj
+./bin/builder -d 100 -o myFile.obj
 ```
 
 ### Prerequisites
