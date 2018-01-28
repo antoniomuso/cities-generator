@@ -20,7 +20,9 @@ The grammar costruction is based on three principal methods:
 
 
 ## Images
-This Images have been rendered with [Yocto/GL PathTracer](https://github.com/xelatihy/yocto-gl/blob/master/apps/ytrace.cpp), 1024 Samples, 520 pixel. 
+This Images have been rendered with [Yocto/GL PathTracer](https://github.com/xelatihy/yocto-gl/blob/master/apps/ytrace.cpp)
+![Image](Images/image_1920_pixel.jpg)
+
 ![Image](Images/image7.png)
 ![Image](Images/out1.png)
 ![Image](Images/out9.png)
