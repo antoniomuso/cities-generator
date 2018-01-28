@@ -578,7 +578,8 @@ int main (int argc, char** argv) {
                      {-1.4f, 8, 6}};
         lshp->points = {0, 1};
         auto lmat = new material{"light"};
-        lmat->ke = {3000, 3000, 3000};
+        auto light = 50.0f;
+        lmat->ke = {130 * light, 94 * light, 90 * light};
         lmat->kd = {1.0f, 0.57647058823f, 0.16078431372f};
         lshp->mat = lmat;
 
