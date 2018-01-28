@@ -585,15 +585,15 @@ int main (int argc, char** argv) {
         scen->shapes.push_back(lshp);
         scen->materials.push_back(lmat);
         scen->instances.push_back(
-                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,30,10}}, lshp});
+                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,25,50}}, lshp});
     }
     // add cam
     auto cam = new camera{"cam"};
     cam ->frame = {{1,0,0},{0,1,0},{0,0,1},{-25,10,+25}};
     cam->frame = transform_frame(cam->frame,translation_frame3f({0,0,10}));
-    cam->frame = transform_frame(cam->frame,rotation_frame3f({0,1,0},-pif/6));
-    cam->frame = transform_frame(cam->frame,rotation_frame3f({1,0,0},-pif/14));
-    cam->frame = transform_frame(cam->frame,translation_frame3f({0,0,22}));
+    cam->frame = transform_frame(cam->frame,rotation_frame3f({0,1,0},-pif/8));
+    cam->frame = transform_frame(cam->frame,rotation_frame3f({1,0,0},-pif/20));
+    cam->frame = transform_frame(cam->frame,translation_frame3f({3.8,-4.25f,20}));
     cam->yfov = 15 * pif / 180.f;
     cam->aspect = 16.0f / 9.0f;
     cam->aperture = 0;
@@ -607,7 +607,7 @@ int main (int argc, char** argv) {
     scen->materials.push_back(mat);
     auto shp = new shape{"floor"};
     shp->mat = mat;
-    shp->pos = {{-60, 0, -60}, {60, 0, -60}, {60, 0, 60}, {-60, 0, 60}};
+    shp->pos = {{-100, 0, -100}, {100, 0, -100}, {100, 0, 100}, {-100, 0, 100}};
     shp->norm = {{0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}};
     shp->texcoord = {{-10, -10}, {10, -10}, {10, 10}, {-10, 10}};
     shp->triangles = {{0, 1, 2}, {0, 2, 3}};
