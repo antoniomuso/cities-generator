@@ -133,7 +133,7 @@ node loadNode(const string &filename, scene *scene,
     }
     return nod;
 }
-
+// Add rule " nod := .. | nod1 "
 void add_once_node_or(node &nod, node &nod1, transform constValue, Graph *graph) {
     if (nod1.graphPos == -1) {
         nod1.graphPos = graph->nodes.size();
@@ -143,7 +143,6 @@ void add_once_node_or(node &nod, node &nod1, transform constValue, Graph *graph)
         nod.graphPos = graph->nodes.size();
         graph->nodes.push_back(nod);
     }
-    // prendo il nodo appena creato
     auto node = graph->nodes.at(nod.graphPos);
     auto node1 = graph->nodes.at(nod1.graphPos);
 
@@ -187,6 +186,7 @@ void add_multi_nodes_and(node &nod, Graph *graph, vector<pair<node &, transform>
 
 }
 
+
 angles getNewAngle(angles a1, angles a2) {
     auto newAngles = a1 + a2;
     newAngles = newAngles % 360;
@@ -196,6 +196,9 @@ angles getNewAngle(angles a1, angles a2) {
     else return _270;
 }
 
+/*
+ * returns true if there are a collision with subtituions of edge
+ */
 bool collisionControll (Graph* graph,angles rot, vec2i& matPos, edge edge, position_matrix& position) {
 
     if(edge.transf.move == graph->unit.NotMove ) return false;
@@ -257,7 +260,12 @@ bool collisionControll (Graph* graph,angles rot, vec2i& matPos, edge edge, posit
     return (!position.isGoodPos(matPos.x,matPos.y) || position.at(matPos.x,matPos.y));
 }
 
-
+/*
+ * Builds the scene from the grammar
+ * inode: it is the starting node.
+ * blockPosition: matrix for the collision.
+ * matPos: position on the matrix.
+ */
 void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, position_matrix& blockPosition,angles rot, vec2i matPos) {
     auto node = graph->nodes.at(inode);
     if (node.shapes.size() != 0) add_node_to_scene(scn,node, pos);
@@ -308,6 +316,7 @@ void callBuild(scene* scn, Graph* graph, long inode,
     build(scn,graph,inode,pos,rng,blockPosition,_0, {int(height-1), int(width-1)});
 }
 
+// Create roads rules
 void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph) {
 
     auto stradaConStrisciPedonale =  loadNode("myModels/roadTile_025.obj",scen,mapMat);
@@ -414,7 +423,7 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
 
 }
 
-
+// create houses rules
 Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph * graph) {
     //auto graph = new Graph();
 
@@ -606,8 +615,10 @@ int main (int argc, char** argv) {
     scen->instances.push_back(new instance{"floor", {{1,0,0},{0,1,0},{0,0,1},{0,0.2,0}}, shp});
 
     auto graph = new Graph();
+
     build_graph_houses(scen,mapMat,graph);
     build_roads(scen,mapMat,graph);
+
     auto rng =  init_rng(0, static_cast<uint64_t>(time(NULL)));
 
     callBuild(scen,graph,graph->nodeStart,{{1,0,0},{0,1,0},{0,0,1},{-25,0,+25}},rng, dim,dim);
