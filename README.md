@@ -41,7 +41,7 @@ mkdir build; cd build; cmake ..; cmake --build .
 To run application
 ```
 cd ..
-./bin/build_generator
+./bin/builder
 ```
 You can use option **-d** to change cities dimension, default 50, and **-o** to change output filename.
 ```
