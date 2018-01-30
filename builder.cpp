@@ -329,7 +329,7 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
     auto stradaDrittaBordiVerde = loadNode("myModels/roadTile_142.obj",scen,mapMat);
     //auto stradaDrittaSenzaUnBordoVerde= loadNode("ModelsRoads/roadTile_149.obj",scen,mapMat);
     //auto stradaDrittaVerdeRialzata= loadNode("ModelsRoads/roadTile_183.obj",scen,mapMat);
-    //auto incrocioAQuattroVerde = loadNode("myModels/roadTile_141.obj",scen,mapMat);
+    auto incrocioAQuattroVerde = loadNode("myModels/roadTile_141.obj",scen,mapMat);
     //auto bloccoVerdePiano = loadNode("ModelsRoads/roadTile_168.obj",scen,mapMat);
     auto stradaDrittaVerde = loadNode("myModels/roadTile_162.obj",scen,mapMat);
     auto stradaChiusa = loadNode("myModels/roadTile_038.obj",scen,mapMat);
@@ -368,6 +368,7 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
     });
     add_multi_nodes_or(stradeConCurve, graph, {
             {stradaConUscitaGrandeInBassoVerde, {}},
+            {incrocioAQuattroVerde, {}}
     });
     add_multi_nodes_or(alberi, graph, {
             {albero, {graph->unit.NotMove}},
@@ -429,6 +430,11 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
     add_multi_nodes_and(stradaConUscitaGrandeInBassoVerde,graph,{
             {stradeDritte,{graph->unit.Forward}},
             {stradeDritte,{graph->unit.Right,{0,0,0}, _270}}
+    });
+    add_multi_nodes_and(incrocioAQuattroVerde,graph,{
+            {stradeDritte,{graph->unit.Right,{0,0,0},_270}},
+            {stradeDritte,{graph->unit.Back,{0,0,-0.086f}, _180}},
+            {stradeDritte,{graph->unit.Forward,{0,0,0}, _0}}
     });
 
 
