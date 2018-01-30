@@ -260,6 +260,7 @@ bool collisionControll (Graph* graph,angles rot, vec2i& matPos, edge edge, posit
     return (!position.isGoodPos(matPos.x,matPos.y) || position.at(matPos.x,matPos.y));
 }
 
+
 /*
  * Builds the scene from the grammar
  * inode: it is the starting node.
@@ -277,8 +278,8 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
         if (collisionControll(graph,rot,posMat,edge,blockPosition)) {
             continue;
         }
-        blockPosition.set(posMat.x,posMat.y, true);
 
+        blockPosition.set(posMat.x,posMat.y, true);
         auto newPos = pos;
         auto framTrasl = translation_frame3f(edge.transf.constanValue + edge.transf.move);
         newPos = transform_frame(newPos,framTrasl);
@@ -302,6 +303,7 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
             } else if (edge.transf.rotation == _270) {
                 newAngle = getNewAngle(rot,_270);
                 reposition = translation_frame3f({-length(newPos.x),0,0});
+
             }
             newPos = transform_frame(newPos,reposition);
         }
@@ -310,11 +312,13 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
 
 }
 
-void callBuild(scene* scn, Graph* graph, long inode,
+position_matrix callBuild(scene* scn, Graph* graph, long inode,
                frame3f pos, rng_pcg32 rng, unsigned int height, unsigned int width) {
     auto blockPosition = position_matrix(height,width);
     build(scn,graph,inode,pos,rng,blockPosition,_0, {int(height-1), int(width-1)});
+    return blockPosition;
 }
+
 
 // Create roads rules
 void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph) {
@@ -325,7 +329,7 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
     auto stradaDrittaBordiVerde = loadNode("myModels/roadTile_142.obj",scen,mapMat);
     //auto stradaDrittaSenzaUnBordoVerde= loadNode("ModelsRoads/roadTile_149.obj",scen,mapMat);
     //auto stradaDrittaVerdeRialzata= loadNode("ModelsRoads/roadTile_183.obj",scen,mapMat);
-    //auto incrocioAQuattroVerde = loadNode("ModelsRoads/roadTile_141.obj",scen,mapMat);
+    //auto incrocioAQuattroVerde = loadNode("myModels/roadTile_141.obj",scen,mapMat);
     //auto bloccoVerdePiano = loadNode("ModelsRoads/roadTile_168.obj",scen,mapMat);
     auto stradaDrittaVerde = loadNode("myModels/roadTile_162.obj",scen,mapMat);
     auto stradaChiusa = loadNode("myModels/roadTile_038.obj",scen,mapMat);
@@ -363,7 +367,7 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
 
     });
     add_multi_nodes_or(stradeConCurve, graph, {
-            {stradaConUscitaGrandeInBassoVerde, {}}
+            {stradaConUscitaGrandeInBassoVerde, {}},
     });
     add_multi_nodes_or(alberi, graph, {
             {albero, {graph->unit.NotMove}},
@@ -377,7 +381,8 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
     });
     add_multi_nodes_and(stradaConStrisciPedonale,graph, {
             {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Left,{0,0.2,0},_90}}
+            {house,{graph->unit.Left,{0,0.2,0},_90}},
+            {house,{graph->unit.Right,{0,0.2,0},_270}}
     });
     add_multi_nodes_and(stradaConStrisciPedonale,graph, {
             {stradeDritte,{graph->unit.Forward}},
@@ -387,6 +392,11 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
             {stradeDritte,{graph->unit.Forward}},
             {house,{graph->unit.Left,{0,0.2,0},_90}},
             {alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
+    });
+    add_multi_nodes_and(stradaConStrisciPedonale,graph, {
+            {stradeDritte,{graph->unit.Forward}},
+            {house,{graph->unit.Right,{0,0.2,0},_270}},
+            //{alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
     });
 
 
@@ -397,7 +407,8 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
     });
     add_multi_nodes_and(stradaDrittaVerde,graph, {
             {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Left,{0,0.2,0},_90}}
+            {house,{graph->unit.Left,{0,0.2,0},_90}},
+            {house,{graph->unit.Right,{0,0.2,0},_270}}
     });
     add_multi_nodes_and(stradaDrittaVerde,graph, {
             {stradeDritte,{graph->unit.Forward}},
@@ -407,6 +418,10 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
             {stradeDritte,{graph->unit.Forward}},
             {house,{graph->unit.Left,{0,0.2,0},_90}},
             {alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
+    });
+    add_multi_nodes_and(stradaDrittaVerde,graph, {
+            {stradeDritte,{graph->unit.Forward}},
+            {house,{graph->unit.Right,{0,0.2,0},_270}}
     });
 
 
@@ -470,8 +485,8 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
             {tetto, {}},
             {tettoConFinestra, {graph->unit.NotMove,{1, 0, 0}}},
             {tettoTriangolo, {graph->unit.NotMove}},
-            //{tetto2,{{1,0,0}}},
-            //{tetto3,{{1,0,0}}},
+            {tetto2,{graph->unit.NotMove,{1,0,0}}},
+            {tetto3,{graph->unit.NotMove,{1,0,0}}},
             {tetto4,{graph->unit.NotMove,{1,0,0}}}
     });
     add_multi_nodes_or(piani, graph, {
