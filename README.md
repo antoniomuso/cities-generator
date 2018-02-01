@@ -33,20 +33,20 @@ You can found other images in [Images folder](Images)
 
 
 ## Getting Started
-```
+``` shell
 git clone --recursive https://github.com/antoniomuso/cities-generator.git
-```
+``` 
 How to build.
-```
+``` shell
 mkdir build; cd build; cmake ..; cmake --build .
 ```
 To run application
-```
+``` shell
 cd ..
 ./bin/builder
-```
+``` 
 You can use option **-d** to change cities dimension, default 50, and **-o** to change output filename.
-```
+``` shell
 ./bin/builder -d 100 -o myFile.obj
 ```
 
@@ -56,7 +56,7 @@ To Build you need of [OpenGL](http://freeglut.sourceforge.net/), [Glew](http://g
 
 ### Installing
 You can install dependencis on Ubuntu with the following commands:
-```
+``` shell
 sudo apt-get update
 sudo apt-get install freeglut3-dev
 sudo apt-get install libglew-dev
