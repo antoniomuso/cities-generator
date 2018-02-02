@@ -469,6 +469,7 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     auto tetto2 = loadNode("Models/modularBuildings_051.obj", scen, mapMat);
     auto tetto3 = loadNode("Models/modularBuildings_064.obj", scen, mapMat);
     auto tetto4 = loadNode("Models/modularBuildings_052.obj", scen, mapMat);
+    auto tetto5 = loadNode("Models/modularBuildings_011.obj", scen, mapMat);
 
 
     //finestre
@@ -493,7 +494,8 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
             {tettoTriangolo, {graph->unit.NotMove}},
             {tetto2,{graph->unit.NotMove,{1,0,0}}},
             {tetto3,{graph->unit.NotMove,{1,0,0}}},
-            {tetto4,{graph->unit.NotMove,{1,0,0}}}
+            {tetto4,{graph->unit.NotMove,{1,0,0}}},
+            {tetto5,{graph->unit.NotMove}}
     });
     add_multi_nodes_or(piani, graph, {
             {pianoFinestre,  {graph->unit.NotMove}},
