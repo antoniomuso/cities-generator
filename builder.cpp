@@ -600,6 +600,7 @@ int main (int argc, char** argv) {
         lmat->ke = {130 * light, 94 * light, 90 * light};
         lmat->kd = {1.0f, 0.57647058823f, 0.16078431372f};
         lshp->mat = lmat;
+        lshp->mat->rs =0;
 
         scen->shapes.push_back(lshp);
         scen->materials.push_back(lmat);
@@ -623,6 +624,7 @@ int main (int argc, char** argv) {
 
     auto mat = new material{"floor"};
     mat->kd = {0.541176f, 0.709804f, 0.286275f};
+    mat->rs = 0;
     scen->materials.push_back(mat);
     auto shp = new shape{"floor"};
     shp->mat = mat;
