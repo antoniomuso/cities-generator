@@ -13,12 +13,12 @@ enum angles {
     _270 = 270,
 };
 
-struct Move {
-    vec3f Left = {};
-    vec3f Right = {};
-    vec3f Forward = {};
-    vec3f Back = {};
-    vec3f NotMove = {};
+enum Collide {
+    Left ,
+    Right ,
+    Forward ,
+    Back ,
+    NotCollide
 
 };
 
@@ -48,7 +48,7 @@ struct position_matrix {
 
 
 struct transform {
-    vec3f move ;
+    Collide move = NotCollide;
     vec3f constanValue = {0,0,0};
     angles rotation = _0;
     vec3f scale = {0,0,0};
@@ -69,13 +69,7 @@ struct node {
 struct  Graph {
     vector<node> nodes;
     long nodeStart = -1;
-    Move unit = {
-            {0,0,-1},
-            {0,0,1},
-            {1,0,0},
-            {-1,0,0},
-            {0,0,0}
-    };
+
 };
 
 // Add a istance on scene
@@ -109,6 +103,7 @@ node loadNode(const string &filename, scene *scene,
         //mater->kt = mat->kt;
         //mater->kr = mat->kr; // le mesh sono troppo riflettenti
         //mater->ke = mat->ke;
+        mater->rs = 0;
         (*mapMat)[mat->name] = mater;
         scene->materials.push_back(mater);
     }
@@ -201,58 +196,58 @@ angles getNewAngle(angles a1, angles a2) {
  */
 bool collisionControll (Graph* graph,angles rot, vec2i& matPos, edge edge, position_matrix& position) {
 
-    if(edge.transf.move == graph->unit.NotMove ) return false;
+    if(edge.transf.move == NotCollide ) return false;
 
     if (rot == _0) {
-        if (edge.transf.move == graph->unit.Right) {
+        if (edge.transf.move == Right) {
             matPos.x += 1;
         }
-        else if (edge.transf.move == graph->unit.Left) {
+        else if (edge.transf.move == Left) {
             matPos.x += -1;
         }
-        else if (edge.transf.move == graph->unit.Forward) {
+        else if (edge.transf.move == Forward) {
             matPos.y += -1;
         }
-        else if (edge.transf.move == graph->unit.Back) {
+        else if (edge.transf.move == Back) {
             matPos.y += 1;
         }
     } else if (rot == _90) {
-        if (edge.transf.move == graph->unit.Right) {
+        if (edge.transf.move == Right) {
             matPos.y += -1;
         }
-        else if (edge.transf.move == graph->unit.Left) {
+        else if (edge.transf.move == Left) {
             matPos.y += +1;
         }
-        else if (edge.transf.move == graph->unit.Forward) {
+        else if (edge.transf.move == Forward) {
             matPos.x += -1;
         }
-        else if (edge.transf.move == graph->unit.Back) {
+        else if (edge.transf.move == Back) {
             matPos.x += 1;
         }
     } else if (rot == _180) {
-        if (edge.transf.move == graph->unit.Right) {
+        if (edge.transf.move == Right) {
             matPos.x += -1;
         }
-        else if (edge.transf.move == graph->unit.Left) {
+        else if (edge.transf.move == Left) {
             matPos.x += 1;
         }
-        else if (edge.transf.move == graph->unit.Forward) {
+        else if (edge.transf.move == Forward) {
             matPos.y += 1;
         }
-        else if (edge.transf.move == graph->unit.Back) {
+        else if (edge.transf.move == Back) {
             matPos.y += -1;
         }
     } else {
-        if (edge.transf.move == graph->unit.Right) {
+        if (edge.transf.move == Right) {
             matPos.y += 1;
         }
-        else if (edge.transf.move == graph->unit.Left) {
+        else if (edge.transf.move == Left) {
             matPos.y += -1;
         }
-        else if (edge.transf.move == graph->unit.Forward) {
+        else if (edge.transf.move == Forward) {
             matPos.x += 1;
         }
-        else if (edge.transf.move == graph->unit.Back) {
+        else if (edge.transf.move == Back) {
             matPos.x += -1;
         }
 
@@ -281,7 +276,7 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
 
         blockPosition.set(posMat.x,posMat.y, true);
         auto newPos = pos;
-        auto framTrasl = translation_frame3f(edge.transf.constanValue + edge.transf.move);
+        auto framTrasl = translation_frame3f(edge.transf.constanValue );
         newPos = transform_frame(newPos,framTrasl);
         auto newAngle = rot;
         if (edge.transf.scale != vec3f{0,0,0}) {
@@ -367,74 +362,74 @@ void build_roads(scene* scen, std::map<string, material*>* mapMat, Graph* graph)
 
     });
     add_multi_nodes_or(stradeConCurve, graph, {
-            {stradaConUscitaGrandeInBassoVerde, {}},
-            {incrocioAQuattroVerde, {}}
+            {stradaConUscitaGrandeInBassoVerde, {NotCollide}},
+            {incrocioAQuattroVerde, {NotCollide}}
     });
     add_multi_nodes_or(alberi, graph, {
-            {albero, {graph->unit.NotMove}},
-            {alberoBig,{graph->unit.NotMove,{0,0,0.125f}}}
+            {albero, {NotCollide}},
+            {alberoBig,{NotCollide,{0,0,0.125f}}}
     });
 
     // Node Obj
     add_multi_nodes_or(stradaConStrisciPedonale,graph,{
-            {stradeDritte, {graph->unit.Forward}},
-            {stradeConCurve, {graph->unit.Forward,{0,0,0},_90}}
+            {stradeDritte, {Forward,{1,0,0}}},
+            {stradeConCurve, {Forward,{1,0,0},_90}}
     });
     add_multi_nodes_and(stradaConStrisciPedonale,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Left,{0,0.2,0},_90}},
-            {house,{graph->unit.Right,{0,0.2,0},_270}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {house,{Left,{0,0.2,-1},_90}},
+            {house,{Right,{0,0.2,+1},_270}}
     });
     add_multi_nodes_and(stradaConStrisciPedonale,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {alberi,{NotCollide,{0.2,0.2,0.11f}}}
     });
     add_multi_nodes_and(stradaConStrisciPedonale,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Left,{0,0.2,0},_90}},
-            {alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {house,{Left,{0,0.2,-1},_90}},
+            {alberi,{NotCollide,{0.2,0.2,0.11f}}}
     });
     add_multi_nodes_and(stradaConStrisciPedonale,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Right,{0,0.2,0},_270}},
+            {stradeDritte,{Forward,{1,0,0}}},
+            {house,{Right,{0,0.2,+1},_270}},
             //{alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
     });
 
 
     // Strada Normale
     add_multi_nodes_or(stradaDrittaVerde,graph,{
-            {stradeDritte, {graph->unit.Forward}},
-            {stradeConCurve, {graph->unit.Forward,{0,0,0},_90}}
+            {stradeDritte, {Forward,{1,0,0}}},
+            {stradeConCurve, {Forward,{1,0,0},_90}}
     });
     add_multi_nodes_and(stradaDrittaVerde,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Left,{0,0.2,0},_90}},
-            {house,{graph->unit.Right,{0,0.2,0},_270}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {house,{Left,{0,0.2,-1},_90}},
+            {house,{Right,{0,0.2,1},_270}}
     });
     add_multi_nodes_and(stradaDrittaVerde,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {alberi,{NotCollide,{0.2,0.2,0.11f}}}
     });
     add_multi_nodes_and(stradaDrittaVerde,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Left,{0,0.2,0},_90}},
-            {alberi,{graph->unit.NotMove,{0.2,0.2,0.11f}}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {house,{Left,{0,0.2,-1},_90}},
+            {alberi,{NotCollide,{0.2,0.2,0.11f}}}
     });
     add_multi_nodes_and(stradaDrittaVerde,graph, {
-            {stradeDritte,{graph->unit.Forward}},
-            {house,{graph->unit.Right,{0,0.2,0},_270}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {house,{Right,{0,0.2,1},_270}}
     });
 
 
 
     add_multi_nodes_and(stradaConUscitaGrandeInBassoVerde,graph,{
-            {stradeDritte,{graph->unit.Forward}},
-            {stradeDritte,{graph->unit.Right,{0,0,0}, _270}}
+            {stradeDritte,{Forward,{1,0,0}}},
+            {stradeDritte,{Right,{0,0,1}, _270}}
     });
     add_multi_nodes_and(incrocioAQuattroVerde,graph,{
-            {stradeDritte,{graph->unit.Right,{0,0,0},_270}},
-            {stradeDritte,{graph->unit.Back,{0,0,-0.086f}, _180}},
-            {stradeDritte,{graph->unit.Forward,{0,0,0}, _0}}
+            {stradeDritte,{Right,{0,0,1},_270}},
+            {stradeDritte,{Back,{-1,0,-0.086f}, _180}},
+            {stradeDritte,{Forward,{1,0,0}, _0}}
     });
 
 
@@ -473,7 +468,7 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
 
     //finestre
-    auto portaAdArco = loadNode("Models/modularBuildings_099.obj", scen, mapMat);
+    //auto portaAdArco = loadNode("Models/modularBuildings_099.obj", scen, mapMat);
 
 
 
@@ -490,24 +485,24 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
     add_multi_nodes_or(tetti, graph, {
             {tetto, {}},
-            {tettoConFinestra, {graph->unit.NotMove,{1, 0, 0}}},
-            {tettoTriangolo, {graph->unit.NotMove}},
-            {tetto2,{graph->unit.NotMove,{1,0,0}}},
-            {tetto3,{graph->unit.NotMove,{1,0,0}}},
-            {tetto4,{graph->unit.NotMove,{1,0,0}}},
-            {tetto5,{graph->unit.NotMove}}
+            {tettoConFinestra, {NotCollide,{1, 0, 0}}},
+            {tettoTriangolo, {NotCollide}},
+            {tetto2,{NotCollide,{1,0,0}}},
+            {tetto3,{NotCollide,{1,0,0}}},
+            {tetto4,{NotCollide,{1,0,0}}},
+            {tetto5,{NotCollide}}
     });
     add_multi_nodes_or(piani, graph, {
-            {pianoFinestre,  {graph->unit.NotMove}},
-            {pianoFinestrone, {graph->unit.NotMove}},
-            {pianoFinestreQuadrate, {graph->unit.NotMove}},
-            {pianoConBalcone,{graph->unit.NotMove}},
-            {pianoConFinestreCoperte,{graph->unit.NotMove}}
+            {pianoFinestre,  {NotCollide}},
+            {pianoFinestrone, {NotCollide}},
+            {pianoFinestreQuadrate, {NotCollide}},
+            {pianoConBalcone,{NotCollide}},
+            {pianoConFinestreCoperte,{NotCollide}}
     });
 
     //Metto che la variabile di start parte con una base
     add_multi_nodes_or(startNode, graph, {
-            {basi,{graph->unit.NotMove}}
+            {basi,{NotCollide}}
     });
 
 
@@ -516,46 +511,46 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
     //Varaibile BaseConScalinata
     add_multi_nodes_or(BaseConScalinata, graph, {
-            {piani,  {graph->unit.NotMove,{0, 0.8, 0}}},
-            {tetti, {graph->unit.NotMove,{0, 0.8, 0}}}
+            {piani,  {NotCollide,{0, 0.8, 0}}},
+            {tetti, {NotCollide,{0, 0.8, 0}}}
     });
 
     add_multi_nodes_or(BaseConScalinataEFinestre, graph, {
-            {piani,  {graph->unit.NotMove,{0, 0.8, 0}}},
-            {tetti, {graph->unit.NotMove,{0, 0.8, 0}}}
+            {piani,  {NotCollide,{0, 0.8, 0}}},
+            {tetti, {NotCollide,{0, 0.8, 0}}}
     });
 
 
     //Variabili piani
     add_multi_nodes_or(pianoFinestre, graph, {
-            {tetti, {graph->unit.NotMove,{0, 0.6, 0}}},
-            {piani,  {graph->unit.NotMove,{0, 0.6, 0}}}
+            {tetti, {NotCollide,{0, 0.6, 0}}},
+            {piani,  {NotCollide,{0, 0.6, 0}}}
     });
 
     add_multi_nodes_or(pianoFinestrone, graph, {
-            {tetti, {graph->unit.NotMove,{0, 0.6, 0}}},
-            {piani,  {graph->unit.NotMove,{0, 0.6, 0}}}
+            {tetti, {NotCollide,{0, 0.6, 0}}},
+            {piani,  {NotCollide,{0, 0.6, 0}}}
     });
 
     add_multi_nodes_or(pianoFinestreQuadrate, graph, {
-            {tetti, {graph->unit.NotMove,{0, 0.6, 0}}},
-            {piani,  {graph->unit.NotMove,{0, 0.6, 0}}}
+            {tetti, {NotCollide,{0, 0.6, 0}}},
+            {piani,  {NotCollide,{0, 0.6, 0}}}
     });
 
     add_multi_nodes_or(pianoConBalcone, graph, {
-            {tetti, {graph->unit.NotMove,{0, 0.6, 0}}},
-            {piani,  {graph->unit.NotMove,{0, 0.6, 0}}}
+            {tetti, {NotCollide,{0, 0.6, 0}}},
+            {piani,  {NotCollide,{0, 0.6, 0}}}
     });
 
     add_multi_nodes_or(pianoConFinestreCoperte, graph, {
-            {tetti, {graph->unit.NotMove,{0, 0.6, 0}}},
-            {piani,  {graph->unit.NotMove,{0, 0.6, 0}}}
+            {tetti, {NotCollide,{0, 0.6, 0}}},
+            {piani,  {NotCollide,{0, 0.6, 0}}}
     });
 
     // Variabile Base con finestre
     add_multi_nodes_or(baseConFinestreEPortone, graph, {
-            {tetti, {graph->unit.NotMove,{0, 0.6, 0}}},
-            {piani, {graph->unit.NotMove,{0, 0.6, 0}}}
+            {tetti, {NotCollide,{0, 0.6, 0}}},
+            {piani, {NotCollide,{0, 0.6, 0}}}
     });
 
 
