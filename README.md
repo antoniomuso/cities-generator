@@ -21,8 +21,9 @@ The grammar costruction is based on three principal methods:
 
 ## Images
 This Images have been rendered with [Yocto/GL PathTracer](https://github.com/xelatihy/yocto-gl/blob/master/apps/ytrace.cpp)
+```/bin/builder -d 150```
 ![Image](Images/image_1920_pixel.jpg)
-
+```/bin/builder -d 100```
 ![Image](Images/image7.png)
 ![Image](Images/out1.png)
 ![Image](Images/out9.png)
