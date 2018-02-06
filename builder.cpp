@@ -307,10 +307,10 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
 
 }
 
-position_matrix callBuild(scene* scn, Graph* graph, long inode,
-               frame3f pos, rng_pcg32 rng, unsigned int height, unsigned int width) {
+position_matrix callBuild(scene* scn, Graph* graph, frame3f pos, unsigned int height, unsigned int width) {
     auto blockPosition = position_matrix(height,width);
-    build(scn,graph,inode,pos,rng,blockPosition,_0, {int(height-1), int(width-1)});
+    auto rng =  init_rng(0, static_cast<uint64_t>(time(NULL)));
+    build(scn,graph,graph->nodeStart,pos,rng,blockPosition,_0, {int(height-1), int(width-1)});
     return blockPosition;
 }
 
@@ -640,9 +640,8 @@ int main (int argc, char** argv) {
     build_graph_houses(scen,mapMat,graph);
     build_roads(scen,mapMat,graph);
 
-    auto rng =  init_rng(0, static_cast<uint64_t>(time(NULL)));
 
-    callBuild(scen,graph,graph->nodeStart,{{1,0,0},{0,1,0},{0,0,1},{-25,0,+25}},rng, dim,dim);
+    callBuild(scen,graph,{{1,0,0},{0,1,0},{0,0,1},{-25,0,+25}}, dim,dim);
     /*
     graph.nodes.push_back(loadNode("Models/modularBuildings_010.obj", scen, mapMat));
     auto nod = loadNode("Models/modularBuildings_059.obj", scen, mapMat);
