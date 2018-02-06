@@ -6,6 +6,7 @@ Il progetto usa una grammatica context-free specializzata per la costruzione a b
 - Metodi per ruotare gli oggetti nella scena.
 - Metodi per lo scaling.
 - Metodi per evitare collisioni di istanze.
+- Metodi per gestire la profondità.
 
 Le variabili della grammatica nel codice sono chiamati nodi, dentro un nodo abbiamo le shape dell'oggetto legato al nodo.
 I nodi possono anche essere vuoti, e in questo caso potranno essere usati come variabili terminali oppure come variabili di appoggio.
