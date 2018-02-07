@@ -36,9 +36,13 @@ StradaConCurva := StradaDritta
 
 Ovviamente dalla formalizzazione sono state eliminate tutte le costanti per posizionare in maniera esatta gli oggetti. 
 
-L'algoritmo permette di costruire case più complesse e large come nelle immagini:
+L'algoritmo permette di costruire case più complesse e large modificando la grammatica sopra ottenendo:
+![Image](Images/buildBig5.png)
 ![Image](Images/buildBig3.png)
-![Image](Images/buildBig2.png)
+![Image](Images/buildBig4.png)
+
+
+
 
 
 
