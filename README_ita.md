@@ -34,6 +34,11 @@ StradaDritta := StradaDritta | StradaDritta and Casa | StradConCurva
 StradaConCurva := StradaDritta
 ```
 
+Mediante l'algoritmo di building è possibile costruire case più complesse come queste:
+![Image](Images/buildBig3.png)
+![Image](Images/buildBig2.png)
+
+
 
 
 ## Immagini
