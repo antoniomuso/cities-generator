@@ -18,6 +18,10 @@ enum Collide {
     Right ,
     Forward ,
     Back ,
+    LeftForward ,
+    RightForward ,
+    LeftBack ,
+    RightBack ,
     NotCollide
 
 };
@@ -57,6 +61,7 @@ struct transform {
     vec3f constanValue = {0,0,0};
     angles rotation = _0;
     int maxDepth =-1;
+    long inodeDep = -1;
     vec3f scale = {0,0,0};
 };
 
@@ -75,7 +80,6 @@ struct node {
 struct  Graph {
     vector<node> nodes;
     long nodeStart = -1;
-
 };
 
 // Add a istance on scene
@@ -134,16 +138,20 @@ node loadNode(const string &filename, scene *scene,
     }
     return nod;
 }
-// Add rule " nod := .. | nod1 "
-void add_once_node_or(node &nod, node &nod1, transform constValue, Graph *graph) {
-    if (nod1.graphPos == -1) {
-        nod1.graphPos = graph->nodes.size();
-        graph->nodes.push_back(nod1);
-    }
+
+
+void add_node_to_graph(Graph* graph,node& nod) {
     if (nod.graphPos == -1) {
         nod.graphPos = graph->nodes.size();
         graph->nodes.push_back(nod);
     }
+}
+
+// Add rule " nod := .. | nod1 "
+void add_once_node_or(node &nod, node &nod1, transform constValue, Graph *graph) {
+    add_node_to_graph(graph,nod1);
+    add_node_to_graph(graph,nod);
+
     auto node = graph->nodes.at(nod.graphPos);
     auto node1 = graph->nodes.at(nod1.graphPos);
 
@@ -165,11 +173,10 @@ void add_multi_nodes_or(node &nod, Graph *graph, vector<pair<node &, transform>>
     }
 }
 
+
 void add_multi_nodes_and(node &nod, Graph *graph, vector<pair<node &, transform>> vect) {
-    if (nod.graphPos == -1) {
-        nod.graphPos = graph->nodes.size();
-        graph->nodes.push_back(nod);
-    }
+    add_node_to_graph(graph,nod);
+
     auto node = graph->nodes.at(nod.graphPos);
     auto vectEdge = new vector<edge>();
     for (auto pair : vect) {
@@ -205,55 +212,55 @@ bool collisionControll (Graph* graph,angles rot, vec2i& matPos, edge edge, posit
     if(edge.transf.move.collide == NotCollide ) return false;
 
     if (rot == _0) {
-        if (edge.transf.move.collide == Right) {
+        if (edge.transf.move.collide == Right || edge.transf.move.collide == RightForward || edge.transf.move.collide == RightBack) {
             matPos.x += edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Left) {
+        if (edge.transf.move.collide == Left || edge.transf.move.collide == LeftForward || edge.transf.move.collide == LeftBack) {
             matPos.x += -edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Forward) {
+        if (edge.transf.move.collide == Forward || edge.transf.move.collide == RightForward || edge.transf.move.collide == LeftForward) {
             matPos.y += -edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Back) {
+        if (edge.transf.move.collide == Back || edge.transf.move.collide == LeftBack || edge.transf.move.collide == RightBack) {
             matPos.y += edge.transf.move.constant;
         }
     } else if (rot == _90) {
-        if (edge.transf.move.collide == Right) {
+        if (edge.transf.move.collide == Right || edge.transf.move.collide == RightForward || edge.transf.move.collide == RightBack) {
             matPos.y += -edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Left) {
+        if (edge.transf.move.collide == Left || edge.transf.move.collide == LeftForward || edge.transf.move.collide == LeftBack) {
             matPos.y += +edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Forward) {
+        if (edge.transf.move.collide == Forward || edge.transf.move.collide == RightForward || edge.transf.move.collide == LeftForward) {
             matPos.x += -edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Back) {
+        if (edge.transf.move.collide == Back || edge.transf.move.collide == LeftBack || edge.transf.move.collide == RightBack) {
             matPos.x += edge.transf.move.constant;
         }
     } else if (rot == _180) {
-        if (edge.transf.move.collide == Right) {
+        if (edge.transf.move.collide == Right || edge.transf.move.collide == RightForward || edge.transf.move.collide == RightBack) {
             matPos.x += -edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Left) {
+        if (edge.transf.move.collide == Left || edge.transf.move.collide == LeftForward || edge.transf.move.collide == LeftBack) {
             matPos.x += edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Forward) {
+        if (edge.transf.move.collide == Forward || edge.transf.move.collide == RightForward || edge.transf.move.collide == LeftForward) {
             matPos.y += edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Back) {
+        if (edge.transf.move.collide == Back || edge.transf.move.collide == LeftBack || edge.transf.move.collide == RightBack) {
             matPos.y += -edge.transf.move.constant;
         }
     } else {
-        if (edge.transf.move.collide == Right) {
+        if (edge.transf.move.collide == Right || edge.transf.move.collide == RightForward || edge.transf.move.collide == RightBack) {
             matPos.y += edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Left) {
+        if (edge.transf.move.collide == Left || edge.transf.move.collide == LeftForward || edge.transf.move.collide == LeftBack) {
             matPos.y += -edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Forward) {
+        if (edge.transf.move.collide == Forward || edge.transf.move.collide == RightForward || edge.transf.move.collide == LeftForward) {
             matPos.x += edge.transf.move.constant;
         }
-        else if (edge.transf.move.collide == Back) {
+        if (edge.transf.move.collide == Back || edge.transf.move.collide == LeftBack || edge.transf.move.collide == RightBack) {
             matPos.x += -edge.transf.move.constant;
         }
 
@@ -268,11 +275,12 @@ bool collisionControll (Graph* graph,angles rot, vec2i& matPos, edge edge, posit
  * blockPosition: matrix for the collision.
  * matPos: position on the matrix.
  */
-void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, position_matrix& blockPosition,angles rot, vec2i matPos, int depth) {
+void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, position_matrix& blockPosition,angles rot, vec2i matPos, int depth, long inodeDep) {
     auto node = graph->nodes.at(inode);
 
     if (depth > 0) depth--;
     if (depth == 0) {
+        if (inodeDep >= 0 )build(scn,graph,inodeDep,pos,rng, blockPosition,rot,matPos,-1, -1);
         return;
     }
 
@@ -315,7 +323,9 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
             newPos = transform_frame(newPos,reposition);
         }
 
-        build(scn,graph, edge.indexNode,newPos,rng,blockPosition,newAngle,posMat, edge.transf.maxDepth > 0 &&  (depth < 0 || edge.transf.maxDepth < depth) ? edge.transf.maxDepth : depth);
+        build(scn, graph, edge.indexNode, newPos, rng, blockPosition,newAngle,posMat
+                , edge.transf.maxDepth > 0 &&  (depth < 0 || edge.transf.maxDepth < depth) ? edge.transf.maxDepth : depth
+                , edge.transf.inodeDep >= 0 ? edge.transf.inodeDep : inodeDep);
     }
 
 }
@@ -323,7 +333,7 @@ void build (scene* scn, Graph* graph, long inode,frame3f pos,rng_pcg32& rng, pos
 position_matrix callBuild(scene* scn, Graph* graph, frame3f pos, unsigned int height, unsigned int width) {
     auto blockPosition = position_matrix(height,width);
     auto rng =  init_rng(0, static_cast<uint64_t>(time(NULL)));
-    build(scn,graph,graph->nodeStart,pos,rng,blockPosition,_0, {int(height-1), int(width-1)}, -1);
+    build(scn,graph,graph->nodeStart,pos,rng,blockPosition,_0, {int(height-1), int(width-1)}, -1, -1);
     return blockPosition;
 }
 
@@ -581,27 +591,61 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
 
     auto pianoFinestreQuadratePalazzi = loadNode("myModels/modularBuildings_034.obj", scen, mapMat);
+    auto cornicioneTettoAngolo = loadNode("myModels/modularBuildings_0082.obj", scen, mapMat);
+    auto cornicioneTettoLato = loadNode("myModels/modularBuildings_009.obj", scen, mapMat);
+    auto senzaCornicione = loadNode("Models/modularBuildings_016.obj", scen, mapMat);
+    auto bloccoBiancoLato = loadNode("Models/modularBuildings_018.obj", scen, mapMat);
+
+    auto nodeCornicioneLato = node{};
+    auto nodeCornicioneLatoBack = node{};
+
+    auto nodeCornicioneAngoloFSinistra = node{};
+    auto nodeCornicioneAngoloFDestra = node{};
+    auto nodeCornicioneAngoloDestra = node{};
+    auto nodeCornicioneAngoloSinistra = node{};
+
     auto pianoPalazzo = node{};
 
-    add_multi_nodes_and(baseConFinestreEPortone,graph, {
-            {bloccoBiancoOnly, {{Left},{0,0,-1},_0,5}},
-            {bloccoBiancoOnly, {{Right},{0,0,1},_0,5}},
-            {bloccoBianco, {{Forward},{1,0,0}}},
-            {bloccoBianco, {{Forward,2},{2,0,0},_180}},
-            {pianoPalazzo,{{}, {0,0.6,0},_0,4}}
+    add_multi_nodes_or(nodeCornicioneLato,graph ,{
+            {cornicioneTettoLato,{{},{},_90}}
     });
 
-    add_multi_nodes_and(bloccoBianco,graph, {
-            {pianoPalazzo, {{}, {0,0.6,0},_0,4}},
-            {bloccoBiancoOnly, {{Left},{0,0,-1}, _270, 5}},
-            {bloccoBiancoOnly, {{Right},{0,0,1},_90, 5}},
+    add_multi_nodes_or(nodeCornicioneLatoBack,graph ,{
+            {cornicioneTettoLato,{{},{},_90}}
+    });
+
+    add_multi_nodes_or(nodeCornicioneAngoloSinistra,graph ,{
+            {cornicioneTettoAngolo,{{NotCollide},{},_0}}
+    });
+
+    add_multi_nodes_or(nodeCornicioneAngoloDestra,graph ,{
+            {cornicioneTettoAngolo,{{NotCollide},{},_90}}
+    });
+
+    add_multi_nodes_or(nodeCornicioneAngoloFSinistra,graph ,{
+            {cornicioneTettoAngolo,{{},{},_90}}
+    });
+
+    add_multi_nodes_or(nodeCornicioneAngoloFDestra,graph ,{
+            {cornicioneTettoAngolo,{{},{}}}
+    });
+
+
+
+    add_multi_nodes_and(baseConFinestreEPortone,graph, {
+            {bloccoBiancoOnly, {{Left},{0,0,-1},_0,5,nodeCornicioneAngoloSinistra.graphPos}},
+            {bloccoBiancoOnly, {{Right},{0,0,1},_0,5,nodeCornicioneAngoloDestra.graphPos}},
+            {bloccoBiancoOnly, {{LeftForward},{1,0,-1},_180,5,nodeCornicioneAngoloFSinistra.graphPos}},
+            {bloccoBiancoOnly, {{RightForward},{1,0,1},_180,5,nodeCornicioneAngoloFDestra.graphPos}},
+            {bloccoBiancoOnly, {{Forward},{1,0,0},_180,5,nodeCornicioneLato.graphPos}},
+            {pianoPalazzo,{{}, {0,0.6,0},_0,4,nodeCornicioneLato.graphPos}}
     });
 
     add_multi_nodes_or(pianoPalazzo, graph, {
             {bloccoConSolaFinestraSinistra,{}},
             {bloccoConSolaFinestraDestra,{}},
-            {pianoFinestreQuadratePalazzi,{}},
-            {bloccoBuild,{}}
+            //{pianoFinestreQuadratePalazzi,{}},
+            {bloccoBiancoOnly,{}}
     });
 
     add_multi_nodes_or(bloccoConSolaFinestraDestra, graph, {
@@ -614,14 +658,6 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
     add_multi_nodes_and(bloccoBiancoOnly,graph, {
             {pianoPalazzo, {{}, {0,0.6,0}}}
-    });
-
-    add_multi_nodes_and(bloccoBuild,graph, {
-            {pianoPalazzo, {{}, {0,0.6,0}}}
-    });
-
-    add_multi_nodes_and(bloccoBuild,graph, {
-            {pianoFinestreQuadratePalazzi, {{}, {0,0.6,0}}}
     });
 
 
