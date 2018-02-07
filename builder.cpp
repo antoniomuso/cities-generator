@@ -602,6 +602,7 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     // blocchi forma figa
     auto bloccoQuadratoPentagono = loadNode("Models/modularBuildings_037.obj", scen, mapMat);
     //auto bloccoPenatagonoQuadrato = loadNode("Models/modularBuildings_036.obj", scen, mapMat);
+    auto bloccoQuadratoPentagonoFinestra = loadNode("Models/modularBuildings_062.obj", scen, mapMat);
     auto bloccoPentagonoFinestra = loadNode("Models/modularBuildings_039.obj", scen, mapMat);
     auto bloccoPentagono = loadNode("Models/modularBuildings_056.obj", scen, mapMat);
     auto bloccoPentagonoFinestraLungaMezzo = loadNode("Models/modularBuildings_049.obj", scen, mapMat);
@@ -615,6 +616,18 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
             {bloccoBiancoPent, {{Forward},{1,0,0},_90,10}},
             {bloccoQuadratoPentagono,{{}, {0,0.6,0},_0,9}}
     });
+
+    add_multi_nodes_and(baseConFinestreEPortone,graph, {
+            {bloccoQuadratoPentagonoFinestra, {{Left},{0,0,-1},_270,10}},
+            {bloccoQuadratoPentagonoFinestra, {{LeftForward},{1,0,-1},_180,10}},
+            {bloccoBiancoPent, {{Forward},{1,0,0},_90,10}},
+            {bloccoQuadratoPentagono,{{}, {0,0.6,0},_0,9}}
+    });
+
+    add_multi_nodes_or(bloccoQuadratoPentagonoFinestra,graph, {
+            {bloccoQuadratoPentagono,{{},{0,0.6,0}}}
+    });
+
 
     add_multi_nodes_or(bloccoBiancoPent,graph, {
             {bloccoQuadratoPentagono,{{},{0,0.6,0}}}
@@ -733,46 +746,6 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
             {pianoPalazzo, {{}, {0,0.6,0}}}
     });
 
-
-
-
-
-
-    /*
-
-    // Blocco bianco right
-    add_multi_nodes_and(bloccoBiancoRight, graph, {
-            {piani,{NotCollide, {0,0.6,0},_0,5}},
-            {bloccoBiancoRight,{Left,{0,0,-1}, _0}}
-    });
-
-    add_multi_nodes_and(bloccoBiancoRight, graph, {
-            {piani,{NotCollide, {0,0.6,0}}},
-            {bloccoBiancoBack,{Back,{1,0,0}, _90}}
-    });
-    // Blocco bianco back
-    add_multi_nodes_and(bloccoBiancoBack, graph, {
-            {piani,{NotCollide, {0,0.6,0}}},
-            {bloccoBiancoBack,{Back,{1,0,0}}}
-    });
-    add_multi_nodes_and(bloccoBiancoBack, graph, {
-            {piani,{NotCollide, {0,0.6,0}}},
-            {bloccoBiancoBack,{Back,{1,0,0}}}
-    });
-    add_multi_nodes_and(bloccoBiancoBack, graph, {
-            {piani,{NotCollide, {0,0.6,0}}},
-            {bloccoBiancoBack,{Back,{1,0,0}}}
-    });
-    add_multi_nodes_or(bloccoBiancoBack, graph, {
-            {piani,{NotCollide,{0,0.6,0}}}
-    });
-
-     */
-
-
-
-
-
     //Inserisco la variabile startNode come nodo di partenza
     graph->nodeStart = startNode.graphPos;
     return graph;
@@ -815,7 +788,7 @@ int main (int argc, char** argv) {
                      {-1.4f, 8, 6}};
         lshp->points = {0, 1};
         auto lmat = new material{"light"};
-        auto light = 50.0f;
+        auto light = 30.0f;
         lmat->ke = {130 * light, 94 * light, 90 * light};
         lmat->kd = {1.0f, 0.57647058823f, 0.16078431372f};
         lshp->mat = lmat;
@@ -824,7 +797,7 @@ int main (int argc, char** argv) {
         scen->shapes.push_back(lshp);
         scen->materials.push_back(lmat);
         scen->instances.push_back(
-                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,25,50}}, lshp});
+                new instance{"light", {{1,0,0},{0,1,0},{0,0,1},{0,15,50}}, lshp});
     }
     // add cam
     auto cam = new camera{"cam"};
