@@ -20,7 +20,7 @@ La grammatica si basa su questi principali metodi:
 - **callBuild**: Prende in input la scena, il graph, il frame da dove iniziare la generazione e le dimensioni per limitare la generazione. Costruisce la scena usando la grammatica.
 
 ## Costruzione Della Città
-![Image](out.png)
+![Image](Images/bigBuilding.png)
 La città è stata costruita usando la grammatica precedente, il codice che costruisce le regole per la generazione della città si trova nei metodi: 
 - **build_graph_houses** Sinteticamente e formalmente la grammatica per la costruzione delle case:
 ```
