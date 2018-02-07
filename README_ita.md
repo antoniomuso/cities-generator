@@ -6,7 +6,7 @@ Il progetto usa una grammatica context-free specializzata per la costruzione a b
 - Metodi per ruotare gli oggetti nella scena.
 - Metodi per lo scaling.
 - Metodi per evitare collisioni di istanze.
-- Metodi per gestire la profondità.
+- Metodi per gestire la profondità di sostituzione variabili.
 
 Le variabili della grammatica nel codice sono chiamati nodi, dentro un nodo abbiamo le shape dell'oggetto legato al nodo.
 I nodi possono anche essere vuoti, e in questo caso potranno essere usati come variabili terminali oppure come variabili di appoggio.
@@ -20,7 +20,7 @@ La grammatica si basa su questi principali metodi:
 - **callBuild**: Prende in input la scena, il graph, il frame da dove iniziare la generazione e le dimensioni per limitare la generazione. Costruisce la scena usando la grammatica.
 
 ## Costruzione Della Città
-![Image](Images/sunset.png)
+![Image](out.png)
 La città è stata costruita usando la grammatica precedente, il codice che costruisce le regole per la generazione della città si trova nei metodi: 
 - **build_graph_houses** Sinteticamente e formalmente la grammatica per la costruzione delle case:
 ```
@@ -35,9 +35,11 @@ StradaConCurva := StradaDritta
 ```
 
 
+
 ## Immagini
 Tutte le immagini sono state renderizzate con [Yocto/GL PathTracer](https://github.com/xelatihy/yocto-gl/blob/master/apps/ytrace.cpp)
 
+![Image](Images/sunset.png)
 ![Image](Images/image7.png)
 ![Image](Images/out1.png)
 ![Image](Images/out9.png)
@@ -45,6 +47,14 @@ Tutte le immagini sono state renderizzate con [Yocto/GL PathTracer](https://gith
 ![Image](Images/moon.png)
 
 Si possono trovare altre nella cartella Image della repository ufficiale: [cities-generator](https://github.com/antoniomuso/cities-generator)
+
+## Implementazioni Future
+- [ ] Randomicità sulle costanti.
+- [ ] Sostituzione con variabile in caso di collissione.
+- [ ] Collissione in altezza.
+- [ ] Conversione algoritmo da ricorsivo ad iterativo con pila. (Per efficenza) 
+- [ ] Inserimento probabilità di scelta di una variabile.
+
 
 ## Authors
 
