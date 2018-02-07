@@ -465,6 +465,7 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
 
     // Blocchi Pallazzi Grandi.
     auto bloccoBianco = loadNode("Models/modularBuildings_018.obj", scen, mapMat);
+    auto bloccoBuild = loadNode("Models/modularBuildings_018.obj", scen, mapMat);
     auto bloccoBiancoOnly = loadNode("Models/modularBuildings_018.obj", scen, mapMat);
     auto bloccoPiattoSpessore = loadNode("Models/modularBuildings_019.obj", scen, mapMat);
     auto bloccoConSolaFinestraSinistra = loadNode("Models/modularBuildings_062.obj", scen, mapMat);
@@ -496,6 +497,7 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     auto basi = node{};
     auto tetti = node{};
     auto piani = node{};
+
 
     add_multi_nodes_or(basi,graph, {
             {BaseConScalinata,  {}},
@@ -575,22 +577,54 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     });
 
 
+
+
+
+    auto pianoFinestreQuadratePalazzi = loadNode("myModels/modularBuildings_034.obj", scen, mapMat);
+    auto pianoPalazzo = node{};
+
     add_multi_nodes_and(baseConFinestreEPortone,graph, {
-            {bloccoBiancoOnly, {{Left},{0,0,-1}}},
-            {bloccoBiancoOnly, {{Right},{0,0,1}}},
+            {bloccoBiancoOnly, {{Left},{0,0,-1},_0,5}},
+            {bloccoBiancoOnly, {{Right},{0,0,1},_0,5}},
             {bloccoBianco, {{Forward},{1,0,0}}},
             {bloccoBianco, {{Forward,2},{2,0,0},_180}},
-            {piani,{{}, {0,0.6,0}}}
+            {pianoPalazzo,{{}, {0,0.6,0},_0,4}}
     });
 
     add_multi_nodes_and(bloccoBianco,graph, {
-            {piani, {{}, {0,0.6,0}}},
-            {bloccoBiancoOnly, {{Left},{0,0,-1}, _270}},
-            {bloccoBiancoOnly, {{Right},{0,0,1},_90}},
+            {pianoPalazzo, {{}, {0,0.6,0},_0,4}},
+            {bloccoBiancoOnly, {{Left},{0,0,-1}, _270, 5}},
+            {bloccoBiancoOnly, {{Right},{0,0,1},_90, 5}},
     });
+
+    add_multi_nodes_or(pianoPalazzo, graph, {
+            {bloccoConSolaFinestraSinistra,{}},
+            {bloccoConSolaFinestraDestra,{}},
+            {pianoFinestreQuadratePalazzi,{}},
+            {bloccoBuild,{}}
+    });
+
+    add_multi_nodes_or(bloccoConSolaFinestraDestra, graph, {
+            {pianoPalazzo,{{},{0,0.6,0}}},
+    });
+
+    add_multi_nodes_or(bloccoConSolaFinestraSinistra, graph, {
+            {pianoPalazzo,{{},{0,0.6,0}}},
+    });
+
     add_multi_nodes_and(bloccoBiancoOnly,graph, {
-            {piani, {{}, {0,0.6,0}}}
+            {pianoPalazzo, {{}, {0,0.6,0}}}
     });
+
+    add_multi_nodes_and(bloccoBuild,graph, {
+            {pianoPalazzo, {{}, {0,0.6,0}}}
+    });
+
+    add_multi_nodes_and(bloccoBuild,graph, {
+            {pianoFinestreQuadratePalazzi, {{}, {0,0.6,0}}}
+    });
+
+
 
 
     /*
