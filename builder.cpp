@@ -481,6 +481,9 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     auto bloccoConSolaFinestraSinistra = loadNode("Models/modularBuildings_062.obj", scen, mapMat);
     auto bloccoConSolaFinestraDestra = loadNode("Models/modularBuildings_067.obj", scen, mapMat);
 
+    //Abbellimenti palazzi
+    auto BloccoColorato = loadNode("Models/modularBuildings_010.obj", scen, mapMat);
+
     // piani
     auto pianoFinestre = loadNode("myModels/modularBuildings_030.obj", scen, mapMat); // Piano con due finestre
     auto pianoFinestrone = loadNode("myModels/modularBuildings_041.obj", scen, mapMat); // piano con finestrona grossa e balconcino
@@ -545,11 +548,13 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     //Varaibile BaseConScalinata
     add_multi_nodes_or(BaseConScalinata, graph, {
             {piani,  {{},{0, 0.8, 0}}},
+            {BloccoColorato, {{},{0, 0.8, 0}}},
             {tetti, {{},{0, 0.8, 0}}}
     });
 
     add_multi_nodes_or(BaseConScalinataEFinestre, graph, {
             {piani,  {{},{0, 0.8, 0}}},
+            {BloccoColorato, {{},{0, 0.8, 0}}},
             {tetti, {{},{0, 0.8, 0}}}
     });
 
@@ -583,9 +588,63 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     // Variabile Base con finestre
     add_multi_nodes_or(baseConFinestreEPortone, graph, {
             {tetti, {{},{0, 0.6, 0}}},
+            {BloccoColorato, {{},{0, 0.6, 0}}},
+            {piani, {{},{0, 0.6, 0}}},
             {piani, {{},{0, 0.6, 0}}}
     });
 
+    add_multi_nodes_or(BloccoColorato,graph, {
+            {piani, {{},{0, 0.2, 0}}}
+    });
+
+
+
+    // blocchi forma figa
+    auto bloccoQuadratoPentagono = loadNode("Models/modularBuildings_037.obj", scen, mapMat);
+    //auto bloccoPenatagonoQuadrato = loadNode("Models/modularBuildings_036.obj", scen, mapMat);
+    auto bloccoPentagonoFinestra = loadNode("Models/modularBuildings_039.obj", scen, mapMat);
+    auto bloccoPentagono = loadNode("Models/modularBuildings_056.obj", scen, mapMat);
+    auto bloccoPentagonoFinestraLungaMezzo = loadNode("Models/modularBuildings_049.obj", scen, mapMat);
+    auto bloccoBiancoPent = loadNode("Models/modularBuildings_018.obj", scen, mapMat);
+    auto tettoPentagonoPent = loadNode("Models/modularBuildings_006.obj", scen, mapMat);
+    add_node_to_graph(graph,tettoPentagonoPent);
+
+    add_multi_nodes_and(baseConFinestreEPortone,graph, {
+            {bloccoBiancoPent, {{Left},{0,0,-1},_270,10}},
+            {bloccoBiancoPent, {{LeftForward},{1,0,-1},_180,10}},
+            {bloccoBiancoPent, {{Forward},{1,0,0},_90,10}},
+            {bloccoQuadratoPentagono,{{}, {0,0.6,0},_0,9}}
+    });
+
+    add_multi_nodes_or(bloccoBiancoPent,graph, {
+            {bloccoQuadratoPentagono,{{},{0,0.6,0}}}
+    });
+
+    add_multi_nodes_or(bloccoQuadratoPentagono,graph,{
+            {bloccoPentagonoFinestra,{{},{0,0.6,0},_0,-1,tettoPentagonoPent.graphPos}}
+    });
+
+    add_multi_nodes_or(bloccoPentagonoFinestra,graph, {
+            {bloccoPentagonoFinestra,{{},{0,0.6,0}}},
+            {bloccoPentagonoFinestra,{{},{0,0.6,0}}},
+            {bloccoPentagono,{{},{0,0.6,0}}},
+            {bloccoPentagonoFinestra,{{},{0,0.6,0}}},
+            //{bloccoPenatagonoQuadrato,{{},{0,0.6,0}}}
+    });
+
+    add_multi_nodes_or(bloccoPentagono,graph, {
+            {bloccoPentagonoFinestra,{{},{0,0.6,0}}},
+            {bloccoPentagonoFinestra,{{},{0,0.6,0}}},
+            {bloccoPentagono,{{},{0,0.6,0}}},
+            {bloccoPentagonoFinestra,{{},{0,0.6,0}}},
+            //{bloccoPenatagonoQuadrato,{{},{0,0.6,0}}}
+    });
+    /*
+
+    add_multi_nodes_or(bloccoPenatagonoQuadrato,graph, {
+            {piani,{{}}}
+    });
+     */
 
 
 
@@ -594,7 +653,7 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     auto cornicioneTettoAngolo = loadNode("myModels/modularBuildings_0082.obj", scen, mapMat);
     auto cornicioneTettoLato = loadNode("myModels/modularBuildings_009.obj", scen, mapMat);
     auto senzaCornicione = loadNode("Models/modularBuildings_016.obj", scen, mapMat);
-    auto bloccoBiancoLato = loadNode("Models/modularBuildings_018.obj", scen, mapMat);
+
 
     auto nodeCornicioneLato = node{};
     auto nodeCornicioneLatoBack = node{};
@@ -630,6 +689,14 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
             {cornicioneTettoAngolo,{{},{}}}
     });
 
+    add_multi_nodes_and(baseConFinestreEPortone,graph, {
+            {bloccoBiancoOnly, {{Left},{0,0,-1},_0,10,nodeCornicioneAngoloSinistra.graphPos}},
+            {bloccoBiancoOnly, {{Right},{0,0,1},_0,10,nodeCornicioneAngoloDestra.graphPos}},
+            {bloccoBiancoOnly, {{LeftForward},{1,0,-1},_180,10,nodeCornicioneAngoloFSinistra.graphPos}},
+            {bloccoBiancoOnly, {{RightForward},{1,0,1},_180,10,nodeCornicioneAngoloFDestra.graphPos}},
+            {bloccoBiancoOnly, {{Forward},{1,0,0},_180,10,nodeCornicioneLato.graphPos}},
+            {pianoPalazzo,{{}, {0,0.6,0},_0,9,nodeCornicioneLato.graphPos}}
+    });
 
 
     add_multi_nodes_and(baseConFinestreEPortone,graph, {
@@ -644,7 +711,9 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     add_multi_nodes_or(pianoPalazzo, graph, {
             {bloccoConSolaFinestraSinistra,{}},
             {bloccoConSolaFinestraDestra,{}},
-            //{pianoFinestreQuadratePalazzi,{}},
+            {pianoFinestreQuadratePalazzi,{}},
+            {pianoFinestreQuadratePalazzi,{}},
+            {pianoFinestreQuadratePalazzi,{}},
             {bloccoBiancoOnly,{}}
     });
 
@@ -659,6 +728,12 @@ Graph* build_graph_houses(scene* scen, std::map<string, material*>* mapMat,Graph
     add_multi_nodes_and(bloccoBiancoOnly,graph, {
             {pianoPalazzo, {{}, {0,0.6,0}}}
     });
+
+    add_multi_nodes_and(pianoFinestreQuadratePalazzi,graph, {
+            {pianoPalazzo, {{}, {0,0.6,0}}}
+    });
+
+
 
 
 
